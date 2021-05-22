@@ -9,16 +9,21 @@
 </head>
 
 <body>
-    <h1>Create New Product</h1>
+    <h1>Add New Product</h1>
     <form action="/products/new" method="POST">
         <label for="name">Name: </label>
         <input type="text" name="name" id="name" placeholder="Product Name..." required>
         <label for="price">Price: </label>
         <input type="number" name="price" id="price" placeholder="Price..." required>
         <label for="category">Category: </label>
-        <select name="category" id="category">Category</select>
+        <select name="category" id="category">
+            <% for(let category of categories) {%> 
+              <option value="<%= category%>"><%= category %>  </option>
+            <% } %> 
+        </select>
+        <button type="submit">Add</button>
     </form>
-
+    <a href="/products">Cancel</a>
 </body>
 
 </html>

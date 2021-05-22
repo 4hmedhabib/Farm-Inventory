@@ -21,11 +21,17 @@
         </li>
         <li>
             Category:
-            <%= product.category %>
+            <a href="/products?category=<%=product.category %>">
+                <%= product.category %>
+            </a>
         </li>
     </ul>
 
     <a href="/products">All Products</a>
+    <a href="/products/edit/<%= product._id %> ">Edit</a>
+    <form action="/products/d/<%=product._id%>?_method=DELETE" method="post">
+        <button type="submit">Delete</button>
+    </form>
 
 </body>
 
