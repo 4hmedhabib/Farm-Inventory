@@ -5,7 +5,7 @@ const methodOverride = require('method-override')
 const mongoose = require('mongoose');
 
 // Connect To DB
-mongoose.connect('mongodb://localhost:27017/farmStand', { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect('mongodb://localhost:27017/farmDB', { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
         console.log('MONGO CONNECTION SUCCESSFULLY !!!')
     })
@@ -14,7 +14,8 @@ mongoose.connect('mongodb://localhost:27017/farmStand', { useNewUrlParser: true,
         console.log(err)
     })
 
-const Product = require('./models/products.js')
+const Product = require('./models/products')
+const Farm = require('./models/farm')
 
 
 app.set('views', path.join(__dirname, 'views'));
@@ -32,6 +33,27 @@ app.use(methodOverride('_method'));
 const categories = ['fruit', 'vegetable', 'dairy']
 
 
+
+
+// FARM ROUTES
+// ===========
+app.get('/farms', async(req, res) => {
+    const farm = await Farm.find({});
+    res.render('farms/index.ejs', { farm });
+});
+
+app.get('/farms/new', (req, res) => {
+    res.render('farms/new')
+});
+
+app.post('/farms', async(req, res) > {
+
+})
+
+
+// PRODUCT ROUTES
+// ===============
+
 // Get All Products
 app.get('/products', async(req, res) => {
     const { category } = req.query;
@@ -43,7 +65,6 @@ app.get('/products', async(req, res) => {
         res.render('products/index', { products, category: 'All' })
     }
 });
-
 
 // Add new Product
 app.get('/products/new', (req, res) => {
