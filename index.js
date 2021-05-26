@@ -22,7 +22,10 @@ app.set('view engine', 'ejs');
 
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json());
-app.use(methodOverride('_method'))
+app.use(methodOverride('_method'));
+
+// Error Handler
+
 
 
 // Categories
@@ -55,18 +58,20 @@ app.post('/products/new', async(req, res) => {
 
 
 // Edit Product
-app.get('/products/edit/:id', async(req, res) => {
+app.get('/products/edit/:id', async(req, res, next) => {
     const { id } = req.params;
     const product = await Product.findById(id)
-    console.log(product)
     res.render('products/edit', { product, categories })
 });
 
-app.put('/products/edit/:id', async(req, res) => {
-    const { id } = req.params;
-    const product = await Product.findByIdAndUpdate(id, req.body);
-
-    res.redirect(`/products/p/${id}`)
+app.put('/products/edit/:id', async(req, res, next) => {
+    try {
+        const { id } = req.params;
+        const product = await Product.findByIdAndUpdate(id, req.body, { runValidators: true });
+        res.redirect(`/products/p/${id}`)
+    } catch (e) {
+        next(e)
+    }
 })
 
 
@@ -78,11 +83,24 @@ app.delete('/products/d/:id', async(req, res) => {
 })
 
 // Get Detailed Product
-app.get('/products/p/:id/', async(req, res) => {
-    const { id } = req.params;
-    const product = await Product.findById(id);
-    res.render('products/show', { product });
-})
+app.get('/products/p/:id/', async(req, res, next) => {
+    try {
+        const { id } = req.params;
+        const product = await Product.findById(id);
+        if (!product) {
+            throw new AppError('NOT FOUND THIS PRODUCT  ', 401)
+        }
+        res.render('products/show', { product });
+    } catch (e) {
+        next(e)
+    }
+});
+
+app.use((err, req, res, next) => {
+    const { status = 500, message = 'Something Went Wrong!' } = err
+    res.status(status).send(message);
+
+});
 
 
 app.listen(3000, () => {

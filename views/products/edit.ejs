@@ -12,9 +12,9 @@
     <h1>Edit Product</h1>
     <form action="/products/edit/<%= product._id %>?_method=PUT" method="POST">
         <label for="name">Name: </label>
-        <input type="text" name="name" id="name" placeholder="Product Name..." value="<%= product.name %>" required>
+        <input type="text" name="name" id="name" placeholder="Product Name..." value="<%= product.name %>">
         <label for="price">Price: </label>
-        <input type="number" name="price" id="price" placeholder="Price..." value="<%= product.price %>" required>
+        <input type="number" name="price" id="price" placeholder="Price..." value="<%= product.price %>">
         <label for="category">Category: </label>
         <select name="category" id="category">
             <% for(let category of categories) {%> 
